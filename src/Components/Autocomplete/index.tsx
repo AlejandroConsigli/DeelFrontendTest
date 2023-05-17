@@ -25,6 +25,12 @@ const Autocomplete: FunctionComponent<Props> = ({
     setSearch(option);
   };
 
+  // highlighting search coincidence
+  const highlightingOption = (option: string) => {
+    const regex = new RegExp(search, "gi");
+    return option.replace(regex, (result) => `<strong>${result}</strong>`);
+  };
+
   return (
     <div className="autocomplete">
       <input
@@ -44,9 +50,8 @@ const Autocomplete: FunctionComponent<Props> = ({
                 key={key}
                 onClick={() => handleClickOption(option)}
                 className="option"
-              >
-                {option}
-              </li>
+                dangerouslySetInnerHTML={{ __html: highlightingOption(option) }}
+              />
             ))}
           </ul>
         )
