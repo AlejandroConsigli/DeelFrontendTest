@@ -2,27 +2,37 @@ import { useState, useEffect } from "react";
 import "./styles.css";
 import Autocomplete from "../Autocomplete";
 
-const mockedFruits = ["Banana", "Orange", "Apple"];
+interface user {
+  name: string;
+}
 
 const App = () => {
   const [search, setSearch] = useState<string>("");
   const [options, setOptions] = useState<string[]>([]);
 
-  // creating a filtering async function
-  const filterFruits = async (fruits: string[]): Promise<string[]> => {
+  // filtering names asynchronously
+  const filterName = async (names: string[]): Promise<string[]> => {
     return new Promise((resolve) => {
-      const filteredFruits = fruits.filter((fruit: string) =>
-        fruit.toLowerCase().includes(search.toLowerCase())
-      );
-      resolve(filteredFruits);
+      setTimeout(() => {
+        const filteredNames = names.filter((name: string) =>
+          name.toLowerCase().includes(search.toLowerCase())
+        );
+        resolve(filteredNames);
+      }, 100);
     });
   };
 
-  //fetching data from mocked data
+  // fetching data from mocked data
   const fetchData = async () => {
     try {
-      const fruits = await filterFruits(mockedFruits);
-      setOptions(fruits);
+      const res = await fetch("https://jsonplaceholder.typicode.com/users");
+      const users = await res.json();
+      // maping only users name
+      const names: string[] = users.map((user: user) => user.name);
+      // filtering users name
+      const filteredNames: string[] = await filterName(names);
+
+      setOptions(search ? filteredNames : []);
     } catch (error) {
       console.error(error);
     }

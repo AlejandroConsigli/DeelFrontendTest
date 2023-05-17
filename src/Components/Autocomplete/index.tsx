@@ -14,11 +14,15 @@ const Autocomplete: FunctionComponent<Props> = ({ options, setSearch }) => {
     setSearch(value);
   };
 
+  // selecting option on click
+  const handleClickOption = (option: string) => {
+    setSearch(option);
+  };
+
   return (
     <div className="autocomplete">
       <input
         type="text"
-        name=""
         placeholder="Search here"
         onChange={handleInputChange}
         className="input"
@@ -26,7 +30,11 @@ const Autocomplete: FunctionComponent<Props> = ({ options, setSearch }) => {
       {options.length > 0 && (
         <ul className="options">
           {options.map((option, key) => (
-            <li key={key} className="option">
+            <li
+              key={key}
+              onClick={() => handleClickOption(option)}
+              className="option"
+            >
               {option}
             </li>
           ))}
