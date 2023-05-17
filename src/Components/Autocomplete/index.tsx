@@ -4,10 +4,16 @@ import "./styles.css";
 interface Props {
   search: string;
   options: string[];
+  loading: boolean;
   setSearch: (search: string) => void;
 }
 
-const Autocomplete: FunctionComponent<Props> = ({ options, setSearch }) => {
+const Autocomplete: FunctionComponent<Props> = ({
+  search,
+  options,
+  loading,
+  setSearch,
+}) => {
   // updating search input
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -23,22 +29,27 @@ const Autocomplete: FunctionComponent<Props> = ({ options, setSearch }) => {
     <div className="autocomplete">
       <input
         type="text"
+        value={search}
         placeholder="Search here"
         onChange={handleInputChange}
         className="input"
       />
-      {options.length > 0 && (
-        <ul className="options">
-          {options.map((option, key) => (
-            <li
-              key={key}
-              onClick={() => handleClickOption(option)}
-              className="option"
-            >
-              {option}
-            </li>
-          ))}
-        </ul>
+      {loading ? (
+        <div className="loader" />
+      ) : (
+        options.length > 0 && (
+          <ul className="options">
+            {options.map((option, key) => (
+              <li
+                key={key}
+                onClick={() => handleClickOption(option)}
+                className="option"
+              >
+                {option}
+              </li>
+            ))}
+          </ul>
+        )
       )}
     </div>
   );

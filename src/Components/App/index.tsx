@@ -9,6 +9,8 @@ interface user {
 const App = () => {
   const [search, setSearch] = useState<string>("");
   const [options, setOptions] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   // filtering names asynchronously
   const filterName = async (names: string[]): Promise<string[]> => {
@@ -24,6 +26,8 @@ const App = () => {
 
   // fetching data from mocked data
   const fetchData = async () => {
+    setError(false);
+    setLoading(true);
     try {
       const res = await fetch("https://jsonplaceholder.typicode.com/users");
       const users = await res.json();
@@ -35,7 +39,9 @@ const App = () => {
       setOptions(search ? filteredNames : []);
     } catch (error) {
       console.error(error);
+      setError(true);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -44,9 +50,20 @@ const App = () => {
 
   return (
     <div className="app">
-      <h1 className="title">User Database</h1>
+      <h1 className="title">
+        User Data<small>base</small>
+      </h1>
       <h2 className="subtitle">Please search for a user in our Database</h2>
-      <Autocomplete search={search} options={options} setSearch={setSearch} />
+      {error ? (
+        <span className="error">Something went wrong</span>
+      ) : (
+        <Autocomplete
+          search={search}
+          loading={loading}
+          options={options}
+          setSearch={setSearch}
+        />
+      )}
     </div>
   );
 };
