@@ -13,7 +13,7 @@ const App = () => {
   const [error, setError] = useState<boolean>(false);
 
   // filtering names asynchronously
-  const filterName = useCallback(
+  const filterNames = useCallback(
     async (names: string[]): Promise<string[]> => {
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -27,17 +27,17 @@ const App = () => {
     [search]
   );
 
-  // fetching data from mocked data
+  // fetching data from API
   const fetchData = useCallback(async () => {
     setError(false);
     setLoading(true);
     try {
       const res = await fetch("https://jsonplaceholder.typicode.com/users");
-      const users = await res.json();
-      // maping only users name
+      const users: user[] = await res.json();
+      // mapping only users name
       const names: string[] = users.map((user: user) => user.name);
       // filtering users name
-      const filteredNames: string[] = await filterName(names);
+      const filteredNames: string[] = await filterNames(names);
 
       setOptions(search ? filteredNames : []);
     } catch (error) {
@@ -45,11 +45,11 @@ const App = () => {
       setError(true);
     }
     setLoading(false);
-  }, [search, filterName]);
+  }, [search, filterNames]);
 
   useEffect(() => {
     fetchData();
-  }, [search]);
+  }, [search, fetchData]);
 
   return (
     <div className="app">
