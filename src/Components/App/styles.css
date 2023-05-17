@@ -1,3 +1,33 @@
-.App {
+.app {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+  background-color: black;
+  padding: 40px;
+}
+
+.title,
+.subtitle {
+  color: white;
   text-align: center;
+}
+
+.title {
+  font-size: 50px;
+  margin-top: 20px;
+  margin-bottom: 0;
+  font-weight: 500;
+}
+
+.title small {
+  font-size: 50px;
+  font-weight: 100;
+}
+
+.subtitle {
+  font-size: 20px;
+  margin-top: 70px;
+  margin-bottom: 0;
+  font-weight: 200;
 }
