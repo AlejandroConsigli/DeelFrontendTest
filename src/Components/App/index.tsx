@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./styles.css";
 import Autocomplete from "../Autocomplete";
 
@@ -13,19 +13,22 @@ const App = () => {
   const [error, setError] = useState<boolean>(false);
 
   // filtering names asynchronously
-  const filterName = async (names: string[]): Promise<string[]> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const filteredNames = names.filter((name: string) =>
-          name.toLowerCase().includes(search.toLowerCase())
-        );
-        resolve(filteredNames);
-      }, 100);
-    });
-  };
+  const filterName = useCallback(
+    async (names: string[]): Promise<string[]> => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const filteredNames = names.filter((name: string) =>
+            name.toLowerCase().includes(search.toLowerCase())
+          );
+          resolve(filteredNames);
+        }, 100);
+      });
+    },
+    [search]
+  );
 
   // fetching data from mocked data
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setError(false);
     setLoading(true);
     try {
@@ -42,11 +45,11 @@ const App = () => {
       setError(true);
     }
     setLoading(false);
-  };
+  }, [search, filterName]);
 
   useEffect(() => {
     fetchData();
-  }, [search]);
+  }, [search, fetchData]);
 
   return (
     <div className="app">
