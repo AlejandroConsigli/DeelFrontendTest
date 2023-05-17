@@ -49,7 +49,7 @@ const App = () => {
 
   useEffect(() => {
     fetchData();
-  }, [search, fetchData]);
+  }, [search]);
 
   return (
     <div className="app">
